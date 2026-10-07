@@ -167,7 +167,7 @@ export default function Hero() {
         </p>
 
         <div className="mt-8 flex flex-col items-center gap-4 w-full">
-          <div className="flex items-start justify-center gap-5 sm:gap-8 max-w-full" role="radiogroup" aria-label="Choose a material finish">
+          <div className="w-full max-w-full overflow-x-auto whitespace-nowrap no-scrollbar snap-x px-4 md:px-0 md:flex-wrap md:justify-center flex items-start gap-5 sm:gap-8" role="radiogroup" aria-label="Choose a material finish">
             {finishes.map((finish, index) => {
               const isSelected = selectedIndex === index;
               return (
@@ -181,7 +181,7 @@ export default function Hero() {
                   tabIndex={isSelected ? 0 : -1}
                   onClick={() => selectFinish(index)}
                   onKeyDown={(event) => handleFinishKeyDown(event, index)}
-                  className={`relative pb-3 text-left transition-colors focus-visible:outline-none focus-visible:text-white ${isSelected ? "text-white" : "text-brand-light/40 hover:text-brand-light/70"}`}
+                  className={`relative shrink-0 snap-center pb-3 text-left transition-colors focus-visible:outline-none focus-visible:text-white ${isSelected ? "text-white" : "text-brand-light/40 hover:text-brand-light/70"}`}
                 >
                   <span className="block text-[10px] sm:text-xs font-mono font-bold uppercase tracking-[0.12em] whitespace-nowrap">{finish.name}</span>
                   <span className="block mt-1 text-[8px] sm:text-[9px] font-mono uppercase tracking-[0.08em] whitespace-nowrap opacity-70">{finish.subLabel}</span>

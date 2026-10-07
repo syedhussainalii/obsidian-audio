@@ -1,146 +1,127 @@
-import { useState } from "react";
-import { ArrowRight, Check, LoaderCircle } from "lucide-react";
-
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle, loading, success, error
-  const [message, setMessage] = useState("");
-
-  const handleSubscribe = async (event) => {
-    event?.preventDefault();
-    const trimmed = email.trim();
-    if (!trimmed || !/^\S+@\S+\.\S+$/.test(trimmed)) {
-      setStatus("error");
-      setMessage("Enter a valid email address.");
-      return;
-    }
-    setStatus("loading");
-    setMessage("");
-
-    try {
-      const response = await fetch(`${API_URL}/api/subscribe`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: trimmed }),
-      });
-
-      if (response.ok) {
-        setStatus("success");
-        setEmail("");
-      } else {
-        const payload = await response.json().catch(() => ({}));
-        setStatus("error");
-        setMessage(payload.error || "We could not complete your subscription.");
-      }
-    } catch {
-      setStatus("error");
-      setMessage("Newsletter service unavailable. Please try again.");
-    }
+  const handleComingSoon = (e) => {
+    e.preventDefault();
+    alert(
+      "In-Ear models are dropping in Q4 2026. Join the mailing list for updates!",
+    );
   };
 
   return (
-    <footer className="bg-brand-black border-t border-white/5 pt-20 pb-10 px-6 mt-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
-        {/* Brand & Newsletter */}
-        <div className="md:col-span-2">
-          <h2 className="text-2xl font-black text-brand-white uppercase tracking-[0.2em] mb-4">
-            Obsidian
-          </h2>
-          <p className="text-brand-light/50 font-light max-w-sm mb-6">
-            Join our private list for early access to limited edition drops and
-            acoustic engineering insights.
-          </p>
-
-          <form onSubmit={handleSubscribe} className="flex w-full max-w-md border-b border-brand-light/20 focus-within:border-brand-white transition-colors">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (status === "error") {
-                  setStatus("idle");
-                  setMessage("");
-                }
-              }}
-              placeholder={status === "success" ? "SUBSCRIBED" : "ENTER EMAIL"}
-              disabled={status === "success" || status === "loading"}
-              aria-label="Email address"
-              aria-invalid={status === "error"}
-              className="w-full bg-transparent outline-none text-brand-white placeholder-brand-light/30 uppercase tracking-[0.2em] py-2 text-sm disabled:opacity-50"
-            />
-            <button
-              type="submit"
-              disabled={status === "success" || status === "loading"}
-              aria-label="Subscribe"
-              className="text-brand-light/50 hover:text-brand-white transition-colors p-2 disabled:opacity-50"
+    <footer className="bg-brand-black border-t border-white/5 pt-20 pb-10 px-6 font-sans">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+          {/* Newsletter Section */}
+          <div className="md:col-span-2">
+            <Link
+              to="/"
+              className="text-2xl font-black text-brand-white uppercase tracking-widest block mb-6"
             >
-              {status === "success" ? (
-                <Check className="w-5 h-5 text-green-500" />
-              ) : status === "loading" ? (
-                <LoaderCircle className="w-5 h-5 animate-spin" />
-              ) : (
+              OBSIDIAN
+            </Link>
+            <p className="text-brand-light/50 text-sm mb-8 max-w-sm leading-relaxed">
+              Join our private list for early access to limited edition drops
+              and acoustic engineering insights.
+            </p>
+            <form
+              className="relative max-w-sm"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <input
+                type="email"
+                placeholder="ENTER EMAIL"
+                className="w-full bg-transparent border-b border-white/20 py-3 text-sm text-brand-white placeholder:text-brand-light/30 focus:outline-none focus:border-brand-white transition-colors uppercase tracking-widest"
+              />
+              <button
+                type="submit"
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-brand-light/50 hover:text-brand-white transition-colors"
+              >
                 <ArrowRight className="w-5 h-5" />
-              )}
-            </button>
-          </form>
+              </button>
+            </form>
+          </div>
 
-          {status === "success" && (
-            <p className="text-green-400 text-xs mt-2 uppercase tracking-widest">You are on the list. Welcome to Obsidian.</p>
-          )}
-          {status === "error" && (
-            <p role="alert" className="text-red-400 text-xs mt-2 uppercase tracking-widest">{message}</p>
-          )}
+          {/* Products Links */}
+          <div>
+            <h4 className="text-brand-white text-xs font-bold uppercase tracking-[0.2em] mb-6">
+              Products
+            </h4>
+            <ul className="space-y-4 text-sm text-brand-light/50">
+              <li>
+                <Link
+                  to="/"
+                  className="hover:text-brand-white transition-colors duration-300"
+                >
+                  Over-Ear
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  onClick={handleComingSoon}
+                  className="hover:text-brand-white transition-colors duration-300"
+                >
+                  In-Ear
+                </a>
+              </li>
+              <li>
+                <Link
+                  to="/buy"
+                  className="hover:text-brand-white transition-colors duration-300"
+                >
+                  Accessories
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h4 className="text-brand-white text-xs font-bold uppercase tracking-[0.2em] mb-6">
+              Company
+            </h4>
+            <ul className="space-y-4 text-sm text-brand-light/50">
+              <li>
+                <Link
+                  to="/design"
+                  className="hover:text-brand-white transition-colors duration-300"
+                >
+                  Our Story
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/specs"
+                  className="hover:text-brand-white transition-colors duration-300"
+                >
+                  Support
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@obsidian.com"
+                  className="hover:text-brand-white transition-colors duration-300"
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
-        {/* Links Column 1 */}
-        <div>
-          <h4 className="text-brand-white text-sm font-bold uppercase tracking-[0.2em] mb-6">
-            Products
-          </h4>
-          <ul className="space-y-4 text-brand-light/50 text-sm font-light">
-            <li className="hover:text-brand-white transition-colors cursor-pointer">
-              Over-Ear
-            </li>
-            <li className="hover:text-brand-white transition-colors cursor-pointer">
-              In-Ear
-            </li>
-            <li className="hover:text-brand-white transition-colors cursor-pointer">
-              Accessories
-            </li>
-          </ul>
-        </div>
-
-        {/* Links Column 2 */}
-        <div>
-          <h4 className="text-brand-white text-sm font-bold uppercase tracking-[0.2em] mb-6">
-            Company
-          </h4>
-          <ul className="space-y-4 text-brand-light/50 text-sm font-light">
-            <li className="hover:text-brand-white transition-colors cursor-pointer">
-              Our Story
-            </li>
-            <li className="hover:text-brand-white transition-colors cursor-pointer">
-              Support
-            </li>
-            <li className="hover:text-brand-white transition-colors cursor-pointer">
-              Contact
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      {/* Copyright */}
-      <div className="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-xs text-brand-light/30 uppercase tracking-[0.2em]">
-        <p>© 2026 OBSIDIAN ACOUSTICS.</p>
-        <div className="flex gap-6 mt-4 md:mt-0">
-          <span className="hover:text-brand-white transition-colors cursor-pointer">
-            Privacy Policy
-          </span>
-          <span className="hover:text-brand-white transition-colors cursor-pointer">
-            Terms of Service
-          </span>
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 text-xs text-brand-light/40 uppercase tracking-widest font-mono">
+          <p>© 2026 OBSIDIAN ACOUSTICS.</p>
+          <div className="flex gap-8 mt-4 md:mt-0">
+            <Link to="/" className="hover:text-brand-white transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/" className="hover:text-brand-white transition-colors">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
